@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ayaan Oil Traders</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:Poppins,sans-serif;
+  background:radial-gradient(circle at top,#1b3a4b,#0b1c24);
+}
+.card{
+  width:360px;
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(16px);
+  border-radius:26px;
+  padding:22px;
+  color:#fff;
+}
+h1{
+  font-family:Cinzel,serif;
+  text-align:center;
+  color:#00ffe1;
+}
+label{font-size:13px;margin-top:10px;display:block}
+select,button{
+  width:100%;
+  padding:12px;
+  margin-top:8px;
+  border-radius:14px;
+  border:none;
+  font-size:15px;
+}
+.btn{
+  background:#25D366;
+  font-weight:600;
+}
+.note{
+  font-size:12px;
+  margin-top:14px;
+  padding:10px;
+  background:rgba(0,0,0,.25);
+  border-left:4px solid #00ffe1;
+  border-radius:12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h1>AYAAN OIL TRADERS</h1>
+
+<label>Quantity</label>
+<select id="qty">
+  <option value="1">1 Tin</option>
+  <option value="2">2 Tin</option>
+  <option value="5">5 Tin</option>
+</select>
+
+<label>Tin Size</label>
+<select id="size">
+  <option value="15">15 Liter</option>
+  <option value="20">20 Liter</option>
+</select>
+
+<label>Pickup / Delivery</label>
+<select id="mode">
+  <option>Pickup</option>
+  <option>Delivery</option>
+</select>
+
+<label>Payment</label>
+<select id="payment">
+  <option>Cash</option>
+  <option>Online</option>
+</select>
+
+<button onclick="getLocation()">📍 Get Current Location</button>
+<button class="btn" onclick="sendOrder()">📲 Order on WhatsApp</button>
+
+<div class="note" id="locStatus">
+Location not captured yet
+</div>
+</div>
+
+<script>
+const PHONE = "919398232756";
+let locationLink = "Not Shared";
+
+function getLocation(){
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      locationLink = `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+      document.getElementById("locStatus").innerText = "Location captured ✔";
+    },
+    ()=>{
+      alert("Please allow location access");
+    }
+  );
+}
+
+function sendOrder(){
+  const qty = qtyEl.value;
+  const size = sizeEl.value;
+  const mode = modeEl.value;
+  const payment = paymentEl.value;
+  const price = qty * size * 50;
+
+  const msg =
+`AYAAN OIL TRADERS
+
+Quantity: ${qty} Tin
+Tin Size: ${size} Liter
+Mode: ${mode}
+Payment: ${payment}
+Total Price: ₹${price}
+
+Pickup Location:
+${locationLink}
+
+Notes:
+• Order 1 din pehle
+• Minimum 1 tin`;
+
+  window.location.href =
+    `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;
+}
+
+const qtyEl = document.getElementById("qty");
+const sizeEl = document.getElementById("size");
+const modeEl = document.getElementById("mode");
+const paymentEl = document.getElementById("payment");
+</script>
+
+</body>
+</html>
